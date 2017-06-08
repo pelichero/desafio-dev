@@ -1,5 +1,5 @@
-Para acessar a aplicação
-	mvn spring:boot run
+Para iniciar a aplicação
+	mvn spring-boot:run
 	
 Teste interface gráfica:
 localhost:8080 (evidence.png)	
