@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>MapLink - Pricing Route</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${not #lists.isEmpty(geoDatas)}">
+        <h2>Addresses</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Street</th>
+                <th>Number</th>
+                <th>City</th>
+                <th>State</th>
+            </tr>
+            <tr th:each="geoData : ${geoDatas}">
+                <td th:if="${geoData.streetName} != null" th:text="${geoData.streetName}" />
+                <td th:if="${geoData.number} != null" th:text="${geoData.number}" />
+                <td th:if="${geoData.city} != null" th:text="${geoData.city}" />
+                <td th:if="${geoData.countrySubdivision} != null" th:text="${geoData.countrySubdivision}" />                
+            </tr>
+        </table>
+
+		<h2>Pricing</h2>
+		<table class="table table-striped">
+            <tr>
+                <th>Duration (hrs)</th>
+                <th>Distance (km)</th>
+                <th>Fuel Cost</th>
+                <th>Total Cost (including tolls)</th>
+            </tr>
+            <tr>
+                <td th:if="${spendings} != null" th:text="${spendings.duration}" />
+                <td th:if="${spendings} != null" th:text="${spendings.distance}" />
+                <td th:if="${spendings.fuelCost} != null" th:text="${spendings.fuelCost}" />
+                <td th:if="${spendings.totalCost} != null" th:text="${spendings.totalCost}" />                
+            </tr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
