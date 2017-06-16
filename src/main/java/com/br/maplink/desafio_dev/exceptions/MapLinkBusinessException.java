@@ -2,6 +2,11 @@ package com.br.maplink.desafio_dev.exceptions;
 
 public class MapLinkBusinessException extends Exception{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public MapLinkBusinessException() {
 		super();
 	}

@@ -45,6 +45,13 @@ public class GeoData {
 	@JsonProperty("precision")
 	private String precision;
 	
+	public GeoData() {
+	}
+	
+	public GeoData(Double lat, Double lon){
+		this.location = new Location(lat,lon);
+	}
+
 	public TypeData getType() {
 		return type;
 	}
@@ -136,12 +143,13 @@ public class GeoData {
 	public String getGeoLocation(){
 		return this.getLocation().getLat() + "," +this.getLocation().getLng();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "GeoData [type=" + type + ", matchingScore=" + matchingScore + ", country=" + country
 				+ ", countrySubdivisionAbbreviation=" + countrySubdivisionAbbreviation + ", countrySubdivision="
 				+ countrySubdivision + ", city=" + city + ", streetName=" + streetName + ", number=" + number
-				+ ", displayName=" + displayName + ", location=" + location + ", precision=" + precision + "]";
-	}	
+				+ ", displayName=" + displayName + ", location=" + location + ", precision=" + precision
+				+ ", getGeoLocation()=" + getGeoLocation() + "]";
+	}
 }

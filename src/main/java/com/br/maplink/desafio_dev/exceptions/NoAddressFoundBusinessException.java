@@ -2,6 +2,11 @@ package com.br.maplink.desafio_dev.exceptions;
 
 public class NoAddressFoundBusinessException extends MapLinkBusinessException{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public NoAddressFoundBusinessException() {
 		super();
 	}

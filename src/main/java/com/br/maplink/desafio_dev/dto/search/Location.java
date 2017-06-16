@@ -11,7 +11,18 @@ public class Location {
 	
 	@JsonProperty("lng")
     private Double lng;
+	
+	public Location() {
+	}
     
+    public Location(Double lat, Double lng) {
+		super();
+		this.lat = lat;
+		this.lng = lng;
+	}
+
+
+
 	public Double getLat() {
 		return lat;
 	}
@@ -26,6 +37,10 @@ public class Location {
 
 	public void setLng(Double lng) {
 		this.lng = lng;
+	}
+	
+	public String getGeoLocation(){
+		return this.lat + "," +this.lng;
 	}
 
 	@Override

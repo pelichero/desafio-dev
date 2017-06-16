@@ -2,10 +2,13 @@ package com.br.maplink.desafio_dev.vos;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.br.maplink.desafio_dev.dto.search.GeoData;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class SpendingsVO {
 	
 	
@@ -14,7 +17,7 @@ public class SpendingsVO {
 	private BigDecimal fuelCost;
 	private BigDecimal totalCost;
 	private List<GeoData> geoDatas;
-	private String statusCode = "200";
+	private Integer statusCode = 200;
 	private String message;
 	
 	private DecimalFormat df;
@@ -23,14 +26,14 @@ public class SpendingsVO {
 		 df = new DecimalFormat("#.##");
 	}
 
-	public SpendingsVO(String statusCode, String message) {
+	public SpendingsVO(Integer statusCode, String message) {
 		super();
 		this.statusCode = statusCode;
-		this.message = message;
+		this.message = message;		
 	}
 
 	public Integer getDuration() {
-		if(duration != null){
+		if(duration != null && duration > 0){
 			return duration / 3600;
 		}
 		
@@ -42,11 +45,12 @@ public class SpendingsVO {
 	}
 	
 	public String getDistance() {
-		if(distance != null){			
+	
+		if(distance != null && distance > 0){			
 			return df.format(distance / 1000);
 		}
-		
-		return df.format(distance);
+	
+		return distance + "";
 	}
 	
 	public void setDistance(Double distance) {
@@ -54,7 +58,11 @@ public class SpendingsVO {
 	}
 	
 	public String getFuelCost() {
-		return df.format(fuelCost.doubleValue());
+		if(fuelCost != null){
+			return df.format(fuelCost.doubleValue());
+		}
+		
+		return fuelCost+"";
 	}
 	
 	public void setFuelCost(BigDecimal fuelCost) {		
@@ -62,7 +70,11 @@ public class SpendingsVO {
 	}
 	
 	public String getTotalCost() {
-		return df.format(totalCost.doubleValue());
+		if(totalCost != null){
+			return df.format(totalCost.doubleValue());
+		}
+		
+		return totalCost+"";
 	}
 	
 	public void setTotalCost(BigDecimal totalCost) {
@@ -77,20 +89,30 @@ public class SpendingsVO {
 		this.geoDatas = geoDatas;
 	}
 
-	public String getStatusCode() {
+	public Integer getStatusCode() {
 		return statusCode;
 	}
 
-	public void setStatusCode(String statusCode) {
+	public void setStatusCode(Integer statusCode) {
 		this.statusCode = statusCode;
 	}
-	
+
 	public String getMessage() {
 		return message;
 	}
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	
+	public SpendingsVO nullObject(){
+		this.duration = 0;	
+		this.distance = 0d;
+		this.fuelCost = BigDecimal.ZERO;
+		this.totalCost = BigDecimal.ZERO;
+		this.geoDatas = new ArrayList<>();
+		
+		return this;
 	}
 
 	@Override

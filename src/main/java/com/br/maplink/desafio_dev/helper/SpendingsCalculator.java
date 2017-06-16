@@ -2,6 +2,9 @@ package com.br.maplink.desafio_dev.helper;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.br.maplink.desafio_dev.dto.route.Route;
 import com.br.maplink.desafio_dev.vos.SpendingsVO;
 
@@ -13,10 +16,13 @@ import com.br.maplink.desafio_dev.vos.SpendingsVO;
  */
 public class SpendingsCalculator {
 	
+	private static final Logger logger = LoggerFactory.getLogger(SpendingsCalculator.class);
+
 	private static final Double FUEL_PRICE = 3.29;
 	private static final Integer CAR_CONSUME = 8;
 	
 	public static SpendingsVO calcRouteOutgoings(Route route){
+		logger.info(">> Calculando rota <<");
 		
 		if(route == null){
 			throw new IllegalStateException();
@@ -35,7 +41,8 @@ public class SpendingsCalculator {
 
 	private static BigDecimal calcFuelPriceConsumption(Double distance) {
 		if(distance == null){
-			throw new IllegalStateException();
+			logger.error("Distancia da rota é Zero.");
+			throw new IllegalStateException("Distancia da rota é Zero.");
 		}
 		
 		return new BigDecimal(((distance / 1000) / CAR_CONSUME) * FUEL_PRICE);

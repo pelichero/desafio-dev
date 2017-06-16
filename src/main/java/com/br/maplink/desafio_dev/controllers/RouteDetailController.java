@@ -1,10 +1,13 @@
 package com.br.maplink.desafio_dev.controllers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +31,6 @@ import com.br.maplink.desafio_dev.vos.SpendingsVO;
  */
 @Controller
 public class RouteDetailController {
-
-	private static final String ERROR_CODE = "500";
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -64,9 +65,8 @@ public class RouteDetailController {
 		}
     }
 
-	
 	@RequestMapping(value = "/pricingCheck", method = RequestMethod.GET)
-	public @ResponseBody SpendingsVO calculatePricing(Model model,
+	public @ResponseBody ResponseEntity<SpendingsVO> calculatePricing(Model model,
 			@RequestParam("addressBeginCity")  String addressBeginCity,	
 			@RequestParam("addressBeginState")  String addressBeginState,
 			@RequestParam("addressBeginStreet")  String addressBeginStreet,
@@ -82,12 +82,12 @@ public class RouteDetailController {
 		try {
 			logger.info(">> Recebendo requisicao /pricingCheck <<");
 			
-			return buildSpendings(model,
+			return new ResponseEntity<> (buildSpendings(model,
 					  buildAddress(addressBeginCity, addressBeginState, addressBeginStreet, addressBeginNumber , addressBeginAvenue)
-					, buildAddress(addressEndCity, addressEndState, addressEndStreet, addressEndNumber , addressEndAvenue));
+					, buildAddress(addressEndCity, addressEndState, addressEndStreet, addressEndNumber , addressEndAvenue)),  HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new SpendingsVO(ERROR_CODE, e.getMessage());
+			return new ResponseEntity<>(new SpendingsVO(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
 		}		
 	}
 
@@ -98,8 +98,8 @@ public class RouteDetailController {
 	}
 	
 	private SpendingsVO buildSpendings(Model model, Address addressBegin, Address addressEnd) throws Exception {
-		List<GeoData> geoDatas = geoCodeServices.retrieveGeoData(addressBegin, addressEnd);		
-		Route route = routeServices.retrieveRoute(geoDatas.toArray(new GeoData[geoDatas.size()]));
+		List<GeoData> geoDatas = geoCodeServices.retrieveGeoData(Arrays.asList(addressBegin, addressEnd));		
+		Route route = routeServices.retrieveRoute(geoDatas);
 		
 		SpendingsVO spendings = SpendingsCalculator.calcRouteOutgoings(route);
 		spendings.setGeoDatas(geoDatas);
